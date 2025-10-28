@@ -1,12 +1,12 @@
-drop table if exist User;
+drop table if exists User;
 
 CREATE TABLE User (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL
+    description VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-    ultimAcces TIMESTAMP
-    dataCreated TIMESTAMP default CURRENT_TIMESTAMP
+    password VARCHAR(255) NOT NULL,
+    ultimAcces TIMESTAMP,
+    dataCreated TIMESTAMP default CURRENT_TIMESTAMP,
     dataUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
