@@ -26,9 +26,9 @@ public class UserController {
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
-            return ResponseEntity.ok(users);
+            return ResponseEntity.status(HttpStatus.OK).body(users);
         }
     }
 
