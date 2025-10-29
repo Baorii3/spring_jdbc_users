@@ -36,7 +36,7 @@ public class UserController {
     UserRepository userRepository;
 
     // Obtenir tots els usuaris
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     // Obtenir un usari per ID
-    @GetMapping("/user/{user_id}")
+    @GetMapping("/users/{user_id}")
     public ResponseEntity<User> getUserId(@PathVariable Long user_id) {
         User user = userRepository.findById(user_id);
         if (user == null) {
@@ -58,9 +58,12 @@ public class UserController {
     }
 
     // Afegir un usuari  
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<String> addUser(@RequestBody User user) {
         int numReg = userRepository.save(user);
+        if (numReg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari.");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuari afegit correctament.");
     }
 }
