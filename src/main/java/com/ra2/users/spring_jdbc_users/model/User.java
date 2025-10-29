@@ -14,16 +14,15 @@ public class User {
 
     public User() {}
 
-    public User(long id, String name, String description, String email, String password, LocalDateTime ultimAcces,
-            LocalDateTime dataCreated, LocalDateTime dataUpdated) {
+    public User(long id, String name, String description, String email, String password) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.email = email;
         this.password = password;
-        this.ultimAcces = ultimAcces;
-        this.dataCreated = dataCreated;
-        this.dataUpdated = dataUpdated;
+        this.ultimAcces = LocalDateTime.now();
+        this.dataCreated = LocalDateTime.now();
+        this.dataUpdated = null;
     }
 
     public long getId() {

@@ -2,6 +2,8 @@ package com.ra2.users.spring_jdbc_users.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,9 @@ public class UserRepository {
             user.setDescription(rs.getString("description"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
-            user.setUltimAcces((rs.getTimestamp("ultimAcces") == null) ? null: rs.getTimestamp("ultimAcces").toLocalDateTime() );
-            user.setDataCreated(rs.getTimestamp("dataCreated").toLocalDateTime());
-            user.setDataUpdated(rs.getTimestamp("dataUpdated").toLocalDateTime());
+            user.setUltimAcces(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+            user.setDataCreated(rs.getTimestamp("dataCreated").toLocalDateTime().truncatedTo(ChronoUnit.SECONDS));
+            user.setDataUpdated(null);
             return user;
         }
     }
@@ -36,6 +38,12 @@ public class UserRepository {
     public List<User> findAll() {
         String sql = "Select * from User";
         return jdbcTemplate.query(sql, new UserRowMapper());
+    }
+
+    public User findById(Long id) {
+        String sql = "SELECT * FROM User WHERE id = ?";
+        List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), id);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     public int save(User user) {
