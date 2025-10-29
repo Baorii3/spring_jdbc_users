@@ -60,17 +60,7 @@ public class UserController {
     // Afegir un usuari  
     @PostMapping("/user")
     public ResponseEntity<String> addUser(@RequestBody User user) {
-        try {
-            int numReg = userRepository.save(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuari afegit correctament.");
-        } catch (DuplicateKeyException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("L'usuari amb aquest email ja existeix: " + user.getEmail());
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Falten dades obligatories o valor invalids: nom, email o contrasenya.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari: " + e.getMessage());
-        }
-    }   
-    
-
+        int numReg = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuari afegit correctament.");
+    }
 }
