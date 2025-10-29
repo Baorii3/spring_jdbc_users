@@ -3,15 +3,17 @@ package com.ra2.users.spring_jdbc_users.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ra2.users.spring_jdbc_users.model.User;
@@ -65,5 +67,41 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari.");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuari afegit correctament.");
+    }
+
+    // Update Complet
+    @PutMapping("/users/{user_id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long user_id, @RequestBody User user) {
+        user.setId(user_id);
+        int numReg = userRepository.update(user);
+        if (numReg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en actualitzar l'usuari.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(numReg + " usuari actualitzat correctament.");
+    }
+
+    // Update parcial
+    @PatchMapping("/users/{user_id}")
+    public ResponseEntity<User> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
+        User user = userRepository.findById(user_id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        user.setName(name);
+        int numReg = userRepository.update(user);
+        if (numReg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    // delete
+    @DeleteMapping("/users/{user_id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
+        int numReg = userRepository.deleteById(user_id);
+        if (numReg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en eliminar l'usuari.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(numReg + " usuari eliminat correctament.");
     }
 }

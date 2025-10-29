@@ -50,4 +50,15 @@ public class UserRepository {
         String sql = "Insert into User(name,description,email,password) values (?,?,?,?)";
         return jdbcTemplate.update(sql,user.getName(),user.getDescription(),user.getEmail(),user.getPassword());
     }
+
+    public int update(User user) {
+        String sql = "UPDATE User SET name = ?, description = ?, email = ?, password = ?, dataUpdated = ? WHERE id = ?";
+        user.onUpdate();
+        return jdbcTemplate.update(sql, user.getName(), user.getDescription(), user.getEmail(), user.getPassword(), user.getDataUpdated(), user.getId());
+    }
+
+    public int deleteById(Long id) {
+        String sql = "DELETE FROM User WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
 }
