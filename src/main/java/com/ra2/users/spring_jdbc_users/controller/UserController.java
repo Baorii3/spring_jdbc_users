@@ -76,7 +76,7 @@ public class UserController {
         user.setId(user_id);
         int numReg = userRepository.update(user);
         if (numReg == 0) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en actualitzar l'usuari");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Usuari amb id " + user_id + " actualitzat.");
     }
@@ -103,6 +103,6 @@ public class UserController {
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en eliminar l'usuari.");
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Usuari amb la id " + user_id + " creat.");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuari amb la id " + user_id + " eliminat.");
     }
 }
