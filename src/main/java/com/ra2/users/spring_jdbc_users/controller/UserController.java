@@ -82,7 +82,7 @@ public class UserController {
     }
 
     // Update parcial
-    @PatchMapping("/users/{user_id}")
+    @PatchMapping("/users/{user_id}/name")
     public ResponseEntity<User> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
         User user = userRepository.findById(user_id);
         if (user == null) {
