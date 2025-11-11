@@ -8,18 +8,20 @@ public class User {
     private String description;
     private String email;
     private String password;
+    private String imagePath;
     private LocalDateTime ultimAcces;
     private LocalDateTime dataCreated;
     private LocalDateTime dataUpdated;
 
     public User() {}
 
-    public User(long id, String name, String description, String email, String password) {
+    public User(long id, String name, String description, String email, String password,  String imagePath) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.email = email;
         this.password = password;
+        this.imagePath = imagePath;
         this.ultimAcces = LocalDateTime.now();
         this.dataCreated = LocalDateTime.now();
         this.dataUpdated = null;
@@ -63,6 +65,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public LocalDateTime getUltimAcces() {

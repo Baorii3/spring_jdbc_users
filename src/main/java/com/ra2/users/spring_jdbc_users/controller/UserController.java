@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ra2.users.spring_jdbc_users.model.User;
 import com.ra2.users.spring_jdbc_users.repository.UserRepository;
+import com.ra2.users.spring_jdbc_users.service.UserService;
 
 /* 
 200	OK	                    Todo correcto.
@@ -36,12 +38,12 @@ import com.ra2.users.spring_jdbc_users.repository.UserRepository;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     // Obtenir tots els usuaris
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUser() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userService.findAll();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
@@ -52,9 +54,9 @@ public class UserController {
     // Obtenir un usari per ID
     @GetMapping("/users/{user_id}")
     public ResponseEntity<User> getUserId(@PathVariable Long user_id) {
-        User user = userRepository.findById(user_id);
+        User user = userService.findById(user_id);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(user);
         }
@@ -63,7 +65,7 @@ public class UserController {
     // Afegir un usuari  
     @PostMapping("/users")
     public ResponseEntity<String> addUser(@RequestBody User user) {
-        int numReg = userRepository.save(user);
+        int numReg = userService.save(user);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari.");
         }
@@ -74,32 +76,38 @@ public class UserController {
     @PutMapping("/users/{user_id}")
     public ResponseEntity<String> updateUser(@PathVariable Long user_id, @RequestBody User user) {
         user.setId(user_id);
-        int numReg = userRepository.update(user);
+        int numReg = userService.update(user);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en actualitzar l'usuari");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Usuari amb id " + user_id + " actualitzat.");
     }
 
+
     // Update parcial
     @PatchMapping("/users/{user_id}/name")
-    public ResponseEntity<User> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
-        User user = userRepository.findById(user_id);
-        if (user == null) {
+    public ResponseEntity<String> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
+        int numReg = userService.partialUpdateUser(user_id, name);
+        if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        user.setName(name);
-        int numReg = userRepository.update(user);
-        if (numReg == 0) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuari amb id " + user_id + " actualitzat.");
+    }
+
+    // Updaate parcial image
+    @PatchMapping("/users/{user_id}/image")
+    public ResponseEntity<String> partialUpdateUserImage(@PathVariable Long user_id, @RequestParam MultipartFile imageFile) throws Exception {
+        String imagePath = userService.partialUpdateUserImage(user_id, imageFile);
+        if (imagePath == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuari amb id " + user_id + " actualitzat.");
     }
 
     // delete
     @DeleteMapping("/users/{user_id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
-        int numReg = userRepository.deleteById(user_id);
+        int numReg = userService.deleteById(user_id);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en eliminar l'usuari.");
         }
