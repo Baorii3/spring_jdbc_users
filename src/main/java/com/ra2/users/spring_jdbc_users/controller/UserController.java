@@ -97,7 +97,7 @@ public class UserController {
     // Updaate parcial image
     @PatchMapping("/users/{user_id}/image")
     public ResponseEntity<String> partialUpdateUserImage(@PathVariable Long user_id, @RequestParam MultipartFile imageFile) throws Exception {
-        String imagePath = userService.updateUserImage(user_id, imageFile);
+        String imagePath = userService.updateImage(user_id, imageFile);
         if (imagePath == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
