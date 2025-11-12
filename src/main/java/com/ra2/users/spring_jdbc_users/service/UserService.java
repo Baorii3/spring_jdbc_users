@@ -47,19 +47,20 @@ public class UserService {
         return userRepository.deleteById(id);
     }
 
-    private final String IMAGEN_PATH = "src/main/resources/public/images/";
+    
     public String partialUpdateUserImage(Long id, MultipartFile imageFile) throws Exception {
+        String imagen_path = "src/main/resources/static/images/";
         User user = userRepository.findById(id);
         if (user == null) {
             return null;
         }
 
-        File dir = new File(IMAGEN_PATH);
+        File dir = new File(imagen_path);
         if (!dir.exists()) {
             dir.mkdirs();
         }
         String fileName = imageFile.getOriginalFilename();
-        Path filePath = Path.of(IMAGEN_PATH, fileName);
+        Path filePath = Path.of(imagen_path, fileName);
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         String imagePath = "/images/" + fileName;
         userRepository.partialUpdateUserImage(id, imagePath);
