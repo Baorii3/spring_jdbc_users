@@ -62,6 +62,16 @@ public class UserController {
         }
     }
 
+    // Upload massiu amb csv
+    @PostMapping("/users/upload-csv")
+    public ResponseEntity<String> addAllCsv(@RequestParam MultipartFile csvFile) {
+        int numReg = userService.uploadCsv(csvFile);
+        if (numReg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al afegir usuaris");
+        } 
+        return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuaris afegit correctament");
+    }
+
     // Afegir un usuari  
     @PostMapping("/users")
     public ResponseEntity<String> addUser(@RequestBody User user) {

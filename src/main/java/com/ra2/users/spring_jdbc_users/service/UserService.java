@@ -2,7 +2,10 @@ package com.ra2.users.spring_jdbc_users.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -49,22 +52,27 @@ public class UserService {
 
     
     public String updateImage(Long id, MultipartFile imageFile) throws Exception {
-        String imagen_path = "src/main/resources/static/images/";
+        String imagenPath = "upload/images";
         User user = userRepository.findById(id);
         if (user == null) {
             return null;
         }
 
-        File dir = new File(imagen_path);
+        File dir = new File(imagenPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
         String fileName = imageFile.getOriginalFilename();
-        Path filePath = Path.of(imagen_path, fileName);
+        Path filePath = Path.of(imagenPath, fileName);
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         String imagePath = "/images/" + fileName;
         userRepository.updateImage(id, imagePath);
         return imagePath;
+    }
 
+    public int uploadCsv(MultipartFile csv) throws IOException {
+        String line;
+        int numLine;
+        BufferedReader br = new BufferedReader(new InputStreamReader(csv.getInputStream()));
     }
 }
