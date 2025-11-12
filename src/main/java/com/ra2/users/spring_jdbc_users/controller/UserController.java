@@ -1,5 +1,6 @@
 package com.ra2.users.spring_jdbc_users.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class UserController {
 
     // Upload massiu amb csv
     @PostMapping("/users/upload-csv")
-    public ResponseEntity<String> addAllCsv(@RequestParam MultipartFile csvFile) {
+    public ResponseEntity<String> addAllCsv(@RequestParam MultipartFile csvFile) throws IOException {
         int numReg = userService.uploadCsv(csvFile);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al afegir usuaris");

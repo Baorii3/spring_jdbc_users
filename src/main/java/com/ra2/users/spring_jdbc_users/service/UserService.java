@@ -71,8 +71,30 @@ public class UserService {
     }
 
     public int uploadCsv(MultipartFile csv) throws IOException {
-        String line;
-        int numLine;
-        BufferedReader br = new BufferedReader(new InputStreamReader(csv.getInputStream()));
+        int numReg = 0;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(csv.getInputStream()))) {
+            String row;
+            int numRow = 0;
+
+            while ((row = br.readLine()) != null) {
+                numRow++;
+                if (numRow == 1) continue;
+                
+                String[] rowSplit = row.split(",");
+                User user = new User();
+                if (rowSplit.length < 4) continue;
+                
+                user.setName(rowSplit[0]);
+                user.setDescription(rowSplit[1]);
+                user.setEmail(rowSplit[2]);
+                user.setPassword(rowSplit[3]);
+                if (rowSplit.length > 4) {
+                    user.setImagePath(rowSplit[4]);
+                }
+                userRepository.save(user);
+                numReg++;
+            }
+        }
+        return numReg;
     }
 }
