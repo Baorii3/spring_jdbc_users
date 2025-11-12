@@ -48,7 +48,7 @@ public class UserService {
     }
 
     
-    public String partialUpdateUserImage(Long id, MultipartFile imageFile) throws Exception {
+    public String updateUserImage(Long id, MultipartFile imageFile) throws Exception {
         String imagen_path = "src/main/resources/static/images/";
         User user = userRepository.findById(id);
         if (user == null) {
@@ -63,7 +63,7 @@ public class UserService {
         Path filePath = Path.of(imagen_path, fileName);
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         String imagePath = "/images/" + fileName;
-        userRepository.partialUpdateUserImage(id, imagePath);
+        userRepository.updateUserImage(id, imagePath);
         return imagePath;
 
     }

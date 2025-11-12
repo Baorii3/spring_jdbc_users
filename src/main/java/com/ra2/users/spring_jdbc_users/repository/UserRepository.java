@@ -61,7 +61,7 @@ public class UserRepository {
         return jdbcTemplate.update(sql, user.getName(), user.getDescription(), user.getEmail(), user.getPassword(), user.getImagePath(), user.getDataUpdated(), user.getId());
     }
 
-    public int partialUpdateUserImage(Long id, String imageFile) {
+    public int updateUserImage(Long id, String imageFile) {
         String sql = "UPDATE User SET image_path = ?, dataUpdated = ? WHERE id = ?";
         LocalDateTime dataUpdated = LocalDateTime.now();
         Timestamp timestamp = Timestamp.valueOf(dataUpdated); 
