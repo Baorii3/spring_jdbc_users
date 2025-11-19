@@ -11,6 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ra2.users.spring_jdbc_users.model.User;
 
 import com.ra2.users.spring_jdbc_users.repository.UserRepository;
@@ -20,6 +23,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ObjectMapper mapper;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -83,18 +89,54 @@ public class UserService {
                 String[] rowSplit = row.split(";");
                 User user = new User();
                 if (rowSplit.length < 4) continue;
-                
+
                 user.setName(rowSplit[0]);
                 user.setDescription(rowSplit[1]);
                 user.setEmail(rowSplit[2]);
                 user.setPassword(rowSplit[3]);
+                
                 if (rowSplit.length > 4) {
                     user.setImagePath(rowSplit[4]);
                 }
+                
                 userRepository.save(user);
                 numReg++;
             }
         }
         return numReg;
+    }
+
+    public int uploadJson(MultipartFile json) {
+        int numreg = 0;
+        try {
+            JsonNode arrel = mapper.readTree(json.getInputStream());
+            JsonNode data = arrel.path("data");
+            String control = data.path("control").asText();
+            if (!control.toLowerCase().equals("ok")) {
+                return 0;
+            }
+            
+            int count = data.path("count").asInt();
+            JsonNode users = data.path("users");
+
+            if (count != users.size()) {
+                return 0;
+            }
+
+            for (JsonNode userJson: users) {
+                User user = new User();
+                user.setName(userJson.path("name").asText());
+                user.setDescription(userJson.path("description").asText());
+                user.setEmail(userJson.path("email").asText());
+                user.setPassword(userJson.path("password").asText());
+                userRepository.save(user);
+                numreg++;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return numreg;
+
+
     }
 }

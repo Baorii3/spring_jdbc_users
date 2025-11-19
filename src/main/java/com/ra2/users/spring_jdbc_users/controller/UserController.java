@@ -1,5 +1,6 @@
 package com.ra2.users.spring_jdbc_users.controller;
 
+import java.io.IO;
 import java.io.IOException;
 import java.util.List;
 
@@ -71,6 +72,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al afegir usuaris");
         } 
         return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuaris afegit correctament");
+    }
+
+    @PostMapping("/users/upload-json")
+    public ResponseEntity<String> addAlljson(@RequestParam MultipartFile jsonFile) throws IOException {
+        int numreg = userService.uploadJson(jsonFile);
+        if (numreg == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al afegit usuaris");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(numreg + " usuaris afegit correctament");
     }
 
     // Afegir un usuari  
