@@ -80,7 +80,7 @@ public class UserService {
                 numRow++;
                 if (numRow == 1) continue;
                 
-                String[] rowSplit = row.split(",");
+                String[] rowSplit = row.split(";");
                 User user = new User();
                 if (rowSplit.length < 4) continue;
                 
