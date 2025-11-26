@@ -4,10 +4,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,8 +111,10 @@ public class UserService {
 
     public int uploadJson(MultipartFile json) {
         int numreg = 0;
+        String ruta = "json_processed/"+json.getOriginalFilename();
         try {
-            JsonNode arrel = mapper.readTree(json.getInputStream());
+            byte[] contenido = json.getBytes();
+            JsonNode arrel = mapper.readTree(contenido);
             JsonNode data = arrel.path("data");
             String control = data.path("control").asText();
             if (!control.toLowerCase().equals("ok")) {
@@ -132,11 +137,10 @@ public class UserService {
                 userRepository.save(user);
                 numreg++;
             }
+            Files.write(Paths.get(ruta), contenido);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         return numreg;
-
-
     }
 }
