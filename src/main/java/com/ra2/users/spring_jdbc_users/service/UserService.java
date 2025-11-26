@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ra2.users.spring_jdbc_users.model.User;
-
+import com.ra2.users.spring_jdbc_users.logging.customLogging;
 import com.ra2.users.spring_jdbc_users.repository.UserRepository;
 
 @Service
@@ -27,6 +27,9 @@ public class UserService {
 
     @Autowired
     ObjectMapper mapper;
+
+    @Autowired
+    customLogging customLogging;
 
     public List<User> findAll() {
         return userRepository.findAll();
