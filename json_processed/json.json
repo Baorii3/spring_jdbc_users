@@ -1,0 +1,26 @@
+{
+  "data": {
+    "count": 3,
+    "control": "OK",
+    "users": [
+      {
+        "name": "ian7",
+        "description": "Descripción de ian7",
+        "email": "ian7@email.com",
+        "password": "passian7"
+      },
+      {
+        "name": "ian8",
+        "description": "Descripción de ian8",
+        "email": "ian8@email.com",
+        "password": "passian8"
+      },
+      {
+        "name": "ian9",
+        "description": "Descripción de ian9",
+        "email": "ian9@email.com",
+        "password": "passian9"
+      }
+    ]
+  }
+}
