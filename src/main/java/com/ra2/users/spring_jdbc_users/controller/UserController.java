@@ -21,17 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ra2.users.spring_jdbc_users.model.User;
 import com.ra2.users.spring_jdbc_users.service.UserService;
 
-/* 
-200	OK	                    Todo correcto.
-201	Created	                Se ha creado el recurso correctamente.
-400	Bad Request	            El cliente envió datos incorrectos.
-401	Unauthorized	        Falta autenticación.
-403	Forbidden	            No tienes permiso.
-404	Not Found	            No se encontró el recurso.
-409	Conflict	            El recurso ya existe o hay un conflicto.
-500	Internal Server Error	Error inesperado del servidor.
-*/
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
