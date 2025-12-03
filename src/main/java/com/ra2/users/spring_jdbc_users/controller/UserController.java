@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ra2.users.spring_jdbc_users.model.User;
 import com.ra2.users.spring_jdbc_users.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -29,6 +31,7 @@ public class UserController {
     UserService userService;
 
     // Obtenir tots els usuaris
+    @Tag(name = "Get users")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUser() {
         List<User> users = userService.findAll();
@@ -40,9 +43,10 @@ public class UserController {
     }
 
     // Obtenir un usari per ID
+    @Tag(name = "Get users")
     @GetMapping("/users/{user_id}")
-    public ResponseEntity<User> getUserId(@PathVariable Long user_id) {
-        User user = userService.findById(user_id);
+    public ResponseEntity<User> getUserId(@PathVariable Long user_id) throws IOException {
+        User user = userService.getUserbyId(user_id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
@@ -51,6 +55,7 @@ public class UserController {
     }
 
     // Upload massiu amb csv
+    @Tag(name = "Post users")
     @PostMapping("/users/upload-csv")
     public ResponseEntity<String> addAllCsv(@RequestParam MultipartFile csvFile) throws IOException {
         int numReg = userService.uploadCsv(csvFile);
@@ -60,6 +65,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(numReg + " usuaris afegit correctament");
     }
 
+    @Tag(name = "Post users")
     @PostMapping("/users/upload-json")
     public ResponseEntity<String> addAlljson(@RequestParam MultipartFile jsonFile) throws IOException {
         int numreg = userService.uploadJson(jsonFile);
@@ -69,10 +75,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(numreg + " usuaris afegit correctament");
     }
 
-    // Afegir un usuari  
+    // Afegir un usuari 
+    @Tag(name = "Post users") 
     @PostMapping("/users")
-    public ResponseEntity<String> addUser(@RequestBody User user) {
-        int numReg = userService.save(user);
+    public ResponseEntity<String> addUser(@RequestBody User user) throws IOException {
+        int numReg = userService.postUser(user);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari.");
         }
@@ -80,6 +87,7 @@ public class UserController {
     }
 
     // Update Complet
+    @Tag(name = "Put users")
     @PutMapping("/users/{user_id}")
     public ResponseEntity<String> updateUser(@PathVariable Long user_id, @RequestBody User user) {
         user.setId(user_id);
@@ -92,6 +100,7 @@ public class UserController {
 
 
     // Update parcial
+    @Tag(name = "Patch users")
     @PatchMapping("/users/{user_id}/name")
     public ResponseEntity<String> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
         int numReg = userService.partialUpdateUser(user_id, name);
@@ -102,6 +111,7 @@ public class UserController {
     }
 
     // Updaate parcial image
+    @Tag(name = "Patch users")
     @PatchMapping("/users/{user_id}/image")
     public ResponseEntity<String> partialUpdateUserImage(@PathVariable Long user_id, @RequestParam MultipartFile imageFile) throws Exception {
         String imagePath = userService.updateImage(user_id, imageFile);
@@ -112,6 +122,7 @@ public class UserController {
     }
 
     // delete
+    @Tag(name = "Delete users")
     @DeleteMapping("/users/{user_id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
         int numReg = userService.deleteById(user_id);

@@ -35,12 +35,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id);
+    public User getUserbyId(Long id) throws IOException {
+        String className = this.getClass().getSimpleName();
+        User user = userRepository.findById(id);
+        customLogging.info(className, "getUserbyId", "Consultant l'user amb id: " + id);
+        if (user == null) customLogging.error(className, "getUserbyId", "L'user amb id: " + id + " no existeix");
+        return user;
     }
 
-    public int save(User user) {
-        return userRepository.save(user);
+    public int postUser(User user) throws IOException {
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "postUser", "Afegint un nou user: " + user.getName());
+        int numReg = userRepository.save(user);
+        if (numReg == 0) customLogging.error(className, "postUser", "Error en afegir l'user: " + user.getName());
+
+        return numReg;
     }
 
     public int update(User user) {
