@@ -79,7 +79,7 @@ public class UserController {
     @Tag(name = "Post users") 
     @PostMapping("/users")
     public ResponseEntity<String> addUser(@RequestBody User user) throws IOException {
-        int numReg = userService.postUser(user);
+        int numReg = userService.createUser(user);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en afegir l'usuari.");
         }
@@ -89,9 +89,9 @@ public class UserController {
     // Update Complet
     @Tag(name = "Put users")
     @PutMapping("/users/{user_id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long user_id, @RequestBody User user) {
+    public ResponseEntity<String> updateUser(@PathVariable Long user_id, @RequestBody User user) throws IOException {
         user.setId(user_id);
-        int numReg = userService.update(user);
+        int numReg = userService.updateAllUser(user);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en actualitzar l'usuari");
         }

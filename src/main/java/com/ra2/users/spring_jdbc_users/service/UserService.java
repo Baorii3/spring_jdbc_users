@@ -43,17 +43,25 @@ public class UserService {
         return user;
     }
 
-    public int postUser(User user) throws IOException {
+    public int createUser(User user) throws IOException {
         String className = this.getClass().getSimpleName();
-        customLogging.info(className, "postUser", "Afegint un nou user: " + user.getName());
-        int numReg = userRepository.save(user);
-        if (numReg == 0) customLogging.error(className, "postUser", "Error en afegir l'user: " + user.getName());
-
-        return numReg;
+        customLogging.info(className, "createUser", "Afegint un nou user: " + user.getName());
+        try {
+            userRepository.save(user);
+        } catch (Exception ex) {
+            customLogging.error(className, "createUser", "L'user amb nom: " + user.getName() + " no s'ha creat correctament. Missatge d'error: " + ex.getMessage());
+            return 0;
+        }
+        customLogging.info(className, "createUser", "User creat correctament");
+        return 1;
     }
 
-    public int update(User user) {
-        return userRepository.update(user);
+    public int updateAllUser(User user) throws IOException {
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "updateAllUser", "Actualitzant l'user amb id: " + user.getId());
+        int numReg = userRepository.update(user);
+        if (numReg == 0) customLogging.error(className, "updateAllUser", "L'user amb id: " + user.getId() + " no existeix");
+        return numReg;
     }
 
     public int partialUpdateUser(Long id, String name) {
