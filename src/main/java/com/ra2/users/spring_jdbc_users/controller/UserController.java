@@ -102,7 +102,7 @@ public class UserController {
     // Update parcial
     @Tag(name = "Patch users")
     @PatchMapping("/users/{user_id}/name")
-    public ResponseEntity<String> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) {
+    public ResponseEntity<String> partialUpdateUser(@PathVariable Long user_id, @RequestParam String name) throws IOException {
         int numReg = userService.partialUpdateUser(user_id, name);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -124,7 +124,7 @@ public class UserController {
     // delete
     @Tag(name = "Delete users")
     @DeleteMapping("/users/{user_id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long user_id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long user_id) throws IOException {
         int numReg = userService.deleteById(user_id);
         if (numReg == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en eliminar l'usuari.");

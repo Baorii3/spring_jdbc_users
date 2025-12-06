@@ -39,7 +39,10 @@ public class UserService {
         String className = this.getClass().getSimpleName();
         User user = userRepository.findById(id);
         customLogging.info(className, "getUserbyId", "Consultant l'user amb id: " + id);
+        
         if (user == null) customLogging.error(className, "getUserbyId", "L'user amb id: " + id + " no existeix");
+        
+
         return user;
     }
 
@@ -60,26 +63,48 @@ public class UserService {
         String className = this.getClass().getSimpleName();
         customLogging.info(className, "updateAllUser", "Actualitzant l'user amb id: " + user.getId());
         int numReg = userRepository.update(user);
-        if (numReg == 0) customLogging.error(className, "updateAllUser", "L'user amb id: " + user.getId() + " no existeix");
+        if (numReg == 0) {
+            customLogging.error(className, "updateAllUser", "L'user amb id: " + user.getId() + " no existeix.");
+        } else {
+            customLogging.info(className, "updateAllUser", "L'user amb id: " + user.getId() + " s'ha actualitzat correctament.");
+        }
         return numReg;
     }
 
-    public int partialUpdateUser(Long id, String name) {
+    public int partialUpdateUser(Long id, String name) throws IOException {
         User user = userRepository.findById(id);
+        String className = this.getClass().getSimpleName();
         if (user != null) {
             user.setName(name);
-            return userRepository.update(user);
+            customLogging.info(className, "updateUser", "Modificant l'user amb id: " + id);
+            int numReg = userRepository.update(user);
+            if (numReg == 0) {
+                customLogging.error(className, "updateUser", "L'user amb id: " + id + " no existeix.");
+            } else {
+                customLogging.info(className, "updateUser", "User modificat correctament.");
+            }
+            return numReg;
         }
         return 0;
     }
 
-    public int deleteById(Long id) {
-        return userRepository.deleteById(id);
+    public int deleteById(Long id) throws IOException {
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "deleteUser", "Borrant l'user amb id: " + id);
+        int numReg = userRepository.deleteById(id);
+        if (numReg == 0) {
+            customLogging.error(className, "deleteUser", "L'user amb id: " + id + " no existeix.");
+        } else {
+            customLogging.info(className, "deleteUser", "L'user amb id: " + id + " s'ha borrat correctament.");
+        }
+        return numReg;
     }
 
     
     public String updateImage(Long id, MultipartFile imageFile) throws Exception {
         String imagenPath = "upload/images";
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "updateImage", "Actualitzant la imatge de l'user amb id: " + id);
         User user = userRepository.findById(id);
         if (user == null) {
             return null;
@@ -99,6 +124,8 @@ public class UserService {
 
     public int uploadCsv(MultipartFile csv) throws IOException {
         int numReg = 0;
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "uploadCsv", "Carregant la informació del fitxer " + csv.getOriginalFilename());
         try (BufferedReader br = new BufferedReader(new InputStreamReader(csv.getInputStream()))) {
             String row;
             int numRow = 0;
@@ -109,31 +136,39 @@ public class UserService {
                 
                 String[] rowSplit = row.split(";");
                 User user = new User();
-                if (rowSplit.length < 4) continue;
-
-                user.setName(rowSplit[0]);
-                user.setDescription(rowSplit[1]);
-                user.setEmail(rowSplit[2]);
-                user.setPassword(rowSplit[3]);
-                
-                if (rowSplit.length > 4) {
-                    user.setImagePath(rowSplit[4]);
+                try{
+                    user.setName(rowSplit[0]);
+                    user.setDescription(rowSplit[1]);
+                    user.setEmail(rowSplit[2]);
+                    user.setPassword(rowSplit[3]);
+                    
+                    if (rowSplit.length > 4) {
+                        user.setImagePath(rowSplit[4]);
+                    }
+                    
+                    userRepository.save(user);
+                    numReg++;
+                } catch (Exception ex) {
+                    customLogging.error(className, "uploadCsv", "Error en la línia " + numRow + "del fitxer. Missatge d'error: " + ex.getMessage());
                 }
                 
-                userRepository.save(user);
-                numReg++;
             }
+            customLogging.info(className, "insertAllUserByCsv", "S'han guardat correctament " + numReg + " registresi han donat error " + (numRow-1 - numReg) + " registres.");
+        
         }
         return numReg;
     }
 
-    public int uploadJson(MultipartFile json) {
+    public int uploadJson(MultipartFile json) throws IOException {
         int numreg = 0;
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "uploadJson", "Carregant la informació del fitxer " + json.getOriginalFilename());
         String ruta = "json_processed/"+json.getOriginalFilename();
+        JsonNode data = null;
         try {
             byte[] contenido = json.getBytes();
             JsonNode arrel = mapper.readTree(contenido);
-            JsonNode data = arrel.path("data");
+            data = arrel.path("data");
             String control = data.path("control").asText();
             if (!control.toLowerCase().equals("ok")) {
                 return 0;
@@ -145,20 +180,24 @@ public class UserService {
             if (count != users.size()) {
                 return 0;
             }
-
             for (JsonNode userJson: users) {
                 User user = new User();
-                user.setName(userJson.path("name").asText());
-                user.setDescription(userJson.path("description").asText());
-                user.setEmail(userJson.path("email").asText());
-                user.setPassword(userJson.path("password").asText());
-                userRepository.save(user);
-                numreg++;
+                try {
+                    user.setName(userJson.path("name").asText());
+                    user.setDescription(userJson.path("description").asText());
+                    user.setEmail(userJson.path("email").asText());
+                    user.setPassword(userJson.path("password").asText());
+                    userRepository.save(user);
+                    numreg++;
+                } catch (Exception ex) {
+                    customLogging.error(className, "uploadJson", "Error en el registre de l'usuari " + numreg + ". Missatge d'error: " + ex.getMessage());
+                }
             }
             Files.write(Paths.get(ruta), contenido);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        customLogging.info(className, "uploadJson", "S'han guardat correctament " + numreg + " registresi han donat error " + (data.path("count").asInt() - numreg) + " registres.");
         return numreg;
     }
 }
