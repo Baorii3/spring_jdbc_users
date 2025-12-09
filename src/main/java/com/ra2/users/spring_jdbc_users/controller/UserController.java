@@ -33,7 +33,7 @@ public class UserController {
     // Obtenir tots els usuaris
     @Tag(name = "Get users")
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUser() {
+    public ResponseEntity<List<User>> getUser() throws IOException {
         List<User> users = userService.findAll();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

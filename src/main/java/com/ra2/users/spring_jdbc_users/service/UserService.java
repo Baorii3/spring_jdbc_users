@@ -31,7 +31,9 @@ public class UserService {
     @Autowired
     customLogging customLogging;
 
-    public List<User> findAll() {
+    public List<User> findAll() throws IOException{
+        String className = this.getClass().getSimpleName();
+        customLogging.info(className, "getAllUsers", "Consultant tots els users");
         return userRepository.findAll();
     }
 
