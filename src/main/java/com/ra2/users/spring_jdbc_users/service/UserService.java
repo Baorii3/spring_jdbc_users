@@ -76,9 +76,9 @@ public class UserService {
     public int partialUpdateUser(Long id, String name) throws IOException {
         User user = userRepository.findById(id);
         String className = this.getClass().getSimpleName();
+        customLogging.info(className, "updateUser", "Modificant l'user amb id: " + id);
         if (user != null) {
             user.setName(name);
-            customLogging.info(className, "updateUser", "Modificant l'user amb id: " + id);
             int numReg = userRepository.update(user);
             if (numReg == 0) {
                 customLogging.error(className, "updateUser", "L'user amb id: " + id + " no existeix.");

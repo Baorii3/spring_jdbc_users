@@ -1,0 +1,42 @@
+[2025-12-09 22:34:01] INFO - UserService - getAllUsers - Consultant tots els users
+[2025-12-09 22:34:11] INFO - UserService - getUserbyId - Consultant l'user amb id: 1
+[2025-12-09 22:34:32] INFO - UserService - createUser - Afegint un nou user: Ian
+[2025-12-09 22:34:32] ERROR - UserService - createUser - L'user amb nom: Ian no s'ha creat correctament. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'string' for key 'User.email'
+[2025-12-09 22:34:50] INFO - UserService - createUser - Afegint un nou user: Ian
+[2025-12-09 22:34:50] INFO - UserService - createUser - User creat correctament
+[2025-12-09 22:35:19] INFO - UserService - updateAllUser - Actualitzant l'user amb id: 2
+[2025-12-09 22:35:19] ERROR - UserService - updateAllUser - L'user amb id: 2 no existeix.
+[2025-12-09 22:35:30] INFO - UserService - updateAllUser - Actualitzant l'user amb id: 1
+[2025-12-09 22:35:30] INFO - UserService - updateAllUser - L'user amb id: 1 s'ha actualitzat correctament.
+[2025-12-09 22:35:34] INFO - UserService - getUserbyId - Consultant l'user amb id: 1
+[2025-12-09 22:35:50] INFO - UserService - updateUser - Modificant l'user amb id: 1
+[2025-12-09 22:35:50] INFO - UserService - updateUser - User modificat correctament.
+[2025-12-09 22:35:54] INFO - UserService - updateUser - Modificant l'user amb id: 1
+[2025-12-09 22:35:54] INFO - UserService - updateUser - User modificat correctament.
+[2025-12-09 22:35:55] INFO - UserService - updateUser - Modificant l'user amb id: 1
+[2025-12-09 22:35:55] INFO - UserService - updateUser - User modificat correctament.
+[2025-12-09 22:36:03] INFO - UserService - getAllUsers - Consultant tots els users
+[2025-12-09 22:36:12] INFO - UserService - deleteUser - Borrant l'user amb id: 1
+[2025-12-09 22:36:12] INFO - UserService - deleteUser - L'user amb id: 1 s'ha borrat correctament.
+[2025-12-09 22:36:24] INFO - UserService - updateImage - Actualitzant la imatge de l'user amb id: 1
+[2025-12-09 22:36:39] INFO - UserService - getAllUsers - Consultant tots els users
+[2025-12-09 22:36:49] INFO - UserService - updateImage - Actualitzant la imatge de l'user amb id: 1
+[2025-12-09 22:36:53] INFO - UserService - uploadCsv - Carregant la informació del fitxer csv.csv
+[2025-12-09 22:36:53] INFO - UserService - insertAllUserByCsv - S'han guardat correctament 5 registresi han donat error 0 registres.
+[2025-12-09 22:37:02] INFO - UserService - uploadJson - Carregant la informació del fitxer json.json
+[2025-12-09 22:37:02] INFO - UserService - uploadJson - S'han guardat correctament 3 registresi han donat error 0 registres.
+[2025-12-09 22:37:12] INFO - UserService - uploadJson - Carregant la informació del fitxer json.json
+[2025-12-09 22:37:12] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian7@email.com' for key 'User.email'
+[2025-12-09 22:37:12] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian8@email.com' for key 'User.email'
+[2025-12-09 22:37:12] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian9@email.com' for key 'User.email'
+[2025-12-09 22:37:12] INFO - UserService - uploadJson - S'han guardat correctament 0 registresi han donat error 3 registres.
+[2025-12-09 22:37:22] INFO - UserService - updateImage - Actualitzant la imatge de l'user amb id: 1
+[2025-12-09 22:37:28] INFO - UserService - getAllUsers - Consultant tots els users
+[2025-12-09 22:37:28] INFO - UserService - getAllUsers - Consultant tots els users
+[2025-12-09 22:37:35] INFO - UserService - updateImage - Actualitzant la imatge de l'user amb id: 4
+[2025-12-09 22:37:56] INFO - UserService - updateImage - Actualitzant la imatge de l'user amb id: 5
+[2025-12-09 22:38:07] INFO - UserService - uploadJson - Carregant la informació del fitxer json.json
+[2025-12-09 22:38:07] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian7@email.com' for key 'User.email'
+[2025-12-09 22:38:07] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian8@email.com' for key 'User.email'
+[2025-12-09 22:38:07] ERROR - UserService - uploadJson - Error en el registre de l'usuari 0. Missatge d'error: PreparedStatementCallback; SQL [Insert into User(name,description,email,password,image_path) values (?,?,?,?,?)]; Duplicate entry 'ian9@email.com' for key 'User.email'
+[2025-12-09 22:38:07] INFO - UserService - uploadJson - S'han guardat correctament 0 registresi han donat error 3 registres.
